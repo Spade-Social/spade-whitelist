@@ -3,22 +3,22 @@ import Image from 'next/image'
 
 export default function Home() {
   return (
-    <div className='flex justify-center items-center min-h-screen'>
+    <div className='flex items-center justify-center min-h-screen'>
       <Head>
         <title>Spade -Waitlist</title>
         <link rel="icon" href="/logo.png" />
       </Head>
-      <div className='flex flex-col space-y-5 lg:space-y-0 lg:flex-row items-center justify-between w-full max-w-4xl lg:space-x-10 px-5 lg:px-0'>
+      <div className='flex flex-col items-center justify-between w-full max-w-4xl px-5 space-y-5 lg:space-y-0 lg:flex-row lg:space-x-10 lg:px-0'>
         <div className='max-w-xl space-y-4'>
           <div className='flex items-center'>
             <div>
               <Image src="/logo.png" width={150} height={175} />
             </div>
-            <h1 className='text-4xl lg:text-8xl font-bold text-black tracking-widest text-center lg:text-start'>SPADE</h1>
+            <h1 className='text-4xl font-bold tracking-widest text-center text-black lg:text-8xl lg:text-start'>SPADE</h1>
           </div>
           <p className='text-sm font-semibold text-center lg:text-start'>3,5301 people is on the waitlist</p>
         </div>
-        <form className='flex-1 max-w-sm shadow rounded-2xl shadow-zinc-400 p-5 space-y-2'>
+        <form className='flex-1 max-w-sm p-5 space-y-2 shadow rounded-2xl shadow-zinc-400'>
           <div className='space-y-1'>
             <p className='text-base font-semibold text-black'>Enter your name</p>
             <div className='w-full flex space-x-2.5'>
@@ -34,7 +34,24 @@ export default function Home() {
             <p className='text-base font-semibold text-black'>Enter your otp</p>
             <div className='flex'>
               <input type="text" placeholder="Enter your otp" className='w-full border border-r-0 border-green-600 outline-none p-2.5 rounded-tl-xl rounded-bl-xl' id='otp' required />
-              <button className='w-32 text-white rounded-tr-xl rounded-br-xl bg-green-600 p-2.5'>Send otp</button>
+              <button className='w-32 text-white rounded-tr-xl rounded-br-xl bg-green-600 p-2.5' id='getOtp' onClick={
+                (e) => {
+                  e.preventDefault()
+                  var to = new Date().getTime() + 60000
+                  document.getElementById("getOtp").disabled = true
+                  var x = setInterval(() => {
+                    var from = new Date().getTime()
+                    var diff = to - from
+                    var secs = Math.floor((diff % (1000 * 60)) / 1000)
+                    document.getElementById("getOtp").innerHTML = secs
+                    if (secs == 0) {
+                      clearInterval(x)
+                      document.getElementById("getOtp").innerHTML = "Send otp"
+                      document.getElementById("getOtp").disabled = false
+                    }
+                  }, 1000);
+                }
+              }>Send otp</button>
             </div>
           </div>
           <div>
