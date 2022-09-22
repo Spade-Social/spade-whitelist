@@ -1,9 +1,15 @@
 import Head from 'next/head'
 import emailjs from "emailjs-com"
-import { Input, Select, Option, Button } from "@material-tailwind/react";
+import { Input, Select, Option, Button, Popover, PopoverContent, PopoverHandler } from "@material-tailwind/react";
+import { KeyIcon } from "@heroicons/react/solid"
+import { useState } from 'react';
 
 export default function Home() {
-  function controlOtpButton() {
+  const [fName, setFName] = useState(null)
+  const [lName, setLName] = useState(null)
+  const [email, setEmail] = useState(null)
+  const [country, setCountry] = useState(null)
+  function controlActivationButton() {
     var to = new Date().getTime() + 60000
       document.getElementById("getOtp").disabled = true
       var x = setInterval(() => {
@@ -22,18 +28,18 @@ export default function Home() {
     e.preventDefault()
     const form = document.createElement("form")
     const input = document.createElement("input")
-    const email = document.createElement("input")
+    const emailForm = document.createElement("input")
     var otp = Math.floor(100000 + Math.random() * 900000)
     input.setAttribute("type", "text")
     input.setAttribute("name", "otp")
     input.setAttribute("value", otp)
-    email.setAttribute("type", "email")
-    email.setAttribute("name", "email")
-    email.setAttribute("value", document.getElementById("email").value)
+    emailForm.setAttribute("type", "email")
+    emailForm.setAttribute("name", "email")
+    emailForm.setAttribute("value", email)
     form.appendChild(input)
-    form.appendChild(email)
-    if (document.getElementById("email").value != "" && document.getElementById("email").value.substring(document.getElementById("email").value.length - 10) == "@gmail.com") {
-      controlOtpButton(e)
+    form.appendChild(emailForm)
+    if (email != "" && email?.substring(email.length - 10) == "@gmail.com") {
+      controlActivationButton(e)
       emailjs.sendForm('service_j2eha26', 'template_5p06ioo', form, 'hadEOpMkKVifHmg3u')
       .then((result) => {
           console.log(result.text);
@@ -66,27 +72,33 @@ export default function Home() {
           <div className='space-y-1'>
             <p className='text-sm font-semibold text-black'>Enter your name</p>
             <div className='w-full flex flex-col sm:flex-row space-y-2.5 sm:space-y-0 sm:space-x-2.5'>
-              <Input type="text" label="Enter your first name" className='w-full border border-green-600 outline-none p-2.5 rounded-xl' id='fName' color='green' required />
-              <Input type="text" label="Enter your last name" className='w-full border border-green-600 outline-none p-2.5 rounded-xl' id='lName' color='green' required />
+              <Input type="text" label="Enter your first name" className='w-full border border-green-600 outline-none p-2.5 rounded-xl'
+                id='fName' color='green' onChange={(e) => setFName(e.target.value)} required />
+              <Input type="text" label="Enter your last name" className='w-full border border-green-600 outline-none p-2.5 rounded-xl'
+                id='lName' color='green' onChange={(e) => setLName(e.target.value)} required />
             </div>    
           </div>
           <div>
             <p className='text-sm font-semibold text-black'>Enter your email</p>
-            <Input type="email" label="Enter your email" className='w-full border border-green-600 outline-none p-2.5 rounded-xl' id='email' color='green' required />
+            <Input type="email" label="Enter your email" className='w-full border border-green-600 outline-none p-2.5 rounded-xl'
+              id='email' color='green' onChange={(e) => setEmail(e.target.value)} required />
           </div>
           <div>
-            <p className='text-sm font-semibold text-black'>Enter your otp</p>
+            <p className='text-sm font-semibold text-black'>Enter your activation key</p>
             <div className='flex'>
-              <input type="text" placeholder="Enter your otp" className='w-full border border-r-0 border-green-600 outline-none px-2.5 py-0.5 rounded-tl-xl rounded-bl-xl'
+              <input type="text" placeholder="Enter your activation key" className='w-full border border-r-0 border-gray-400 outline-none px-2.5 rounded-tl-xl rounded-bl-xl'
                 id='otp' required />
-              <button className='w-32 text-white rounded-tr-xl rounded-br-xl bg-green-600 p-2.5' id='getOtp' onClick={
-                (e) => document.getElementById("getOtp").innerHTML == "Send otp" && sendOtp(e) 
-              }>Send otp</button>
+              <button className='w-[150px] text-xs sm:text-base text-white rounded-tr-xl rounded-br-xl bg-green-600 p-2.5 flex items-center justify-center' onClick={
+                (e) => {
+                  e.preventDefault()
+                  document.getElementById("getOtp").innerHTML == "Get key" && sendOtp(e) 
+                } 
+              }><span id='getOtp'>Get key</span><span><KeyIcon className='w-4 h-4 sm:w-6 sm:h-6' /></span></button>
             </div>
           </div>
-          <div>
+          <div className='space-y-1'>
             <p className='text-sm font-semibold text-black'>Select your country</p>
-            <Select variant="outlined" label="Select Country" color='green' id='country'>
+            <Select variant="outlined" label="Select Country" color='green' id='country' onChange={(e) => setCountry(e)} required>
                 <Option value="Afghanistan">Afghanistan</Option>
                 <Option value="Åland Islands">Åland Islands</Option>
                 <Option value="Albania">Albania</Option>
@@ -335,25 +347,29 @@ export default function Home() {
           </div>
           <div>
           </div>
-          <Button type='submit' className='w-full font-normal tracking-widest bg-green-600 text-white text-xl rounded-xl p-3.5' id='join' onClick={(e) => {
-            e.preventDefault()
-            if (document.getElementById("fName").value == "") {
-              document.getElementById("fName").reportValidity()
-            }
-            if (document.getElementById("lName").value == "") {
-              document.getElementById("lName").reportValidity()
-            }
-            if (document.getElementById("email").value == "" ||
-              document.getElementById("email").value.substring(document.getElementById("email").value.length - 10) != "@gmail.com") {
-              document.getElementById("email").reportValidity()
-            }
-            if (document.getElementById("otp").value == "") {
-              document.getElementById("otp").reportValidity()
-            }
-            if (document.getElementById("country").value === "") {
-              document.getElementById("country").reportValidity()
-            }
-          }}>Join Waitlist</Button>
+          <Popover>
+            <PopoverHandler>
+              <Button type='submit' className='w-full font-normal tracking-widest bg-green-600 text-white text-md rounded-xl p-2.5' id='join' onClick={(e) => {
+                e.preventDefault()
+                if (document.getElementById("fName").value == "") {
+                  document.getElementById("fName").reportValidity()
+                }
+                if (document.getElementById("lName").value == "") {
+                  document.getElementById("lName").reportValidity()
+                }
+                if (document.getElementById("email").value == "" ||
+                  document.getElementById("email").value.substring(document.getElementById("email").value.length - 10) != "@gmail.com") {
+                  document.getElementById("email").reportValidity()
+                }
+                if (document.getElementById("otp").value == "") {
+                  document.getElementById("otp").reportValidity()
+                }
+              }}>Join Waitlist</Button>
+              </PopoverHandler>
+              {
+                country == null && <PopoverContent>Select a country</PopoverContent>
+              }
+          </Popover>
         </form>
       </div>
     </div>
