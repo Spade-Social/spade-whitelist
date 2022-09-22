@@ -32,8 +32,7 @@ export default function Home() {
     email.setAttribute("value", document.getElementById("email").value)
     form.appendChild(input)
     form.appendChild(email)
-    var emailValue = document.getElementById("email").value
-    if (emailValue != "" && emailValue.substring(emailValue.length - 10) == "@gmail.com") {
+    if (document.getElementById("email").value != "" && document.getElementById("email").value.substring(document.getElementById("email").value.length - 10) == "@gmail.com") {
       controlOtpButton(e)
       emailjs.sendForm('service_j2eha26', 'template_5p06ioo', form, 'hadEOpMkKVifHmg3u')
       .then((result) => {
