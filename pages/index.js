@@ -1,7 +1,51 @@
 import Head from 'next/head'
 import Image from 'next/image'
+import emailjs from "emailjs-com"
 
 export default function Home() {
+  function controlOtpButton() {
+    var to = new Date().getTime() + 60000
+      document.getElementById("getOtp").disabled = true
+      var x = setInterval(() => {
+        var from = new Date().getTime()
+        var diff = to - from
+        var secs = Math.floor((diff % (1000 * 60)) / 1000)
+        document.getElementById("getOtp").innerHTML = secs
+        if (secs == 0) {
+          clearInterval(x)
+          document.getElementById("getOtp").innerHTML = "Send otp"
+          document.getElementById("getOtp").disabled = false
+        }
+      }, 1000);
+  }
+  function sendOtp(e) {
+    e.preventDefault()
+    const form = document.createElement("form")
+    const input = document.createElement("input")
+    const email = document.createElement("input")
+    var otp = Math.floor(100000 + Math.random() * 900000)
+    input.setAttribute("type", "text")
+    input.setAttribute("name", "otp")
+    input.setAttribute("value", otp)
+    email.setAttribute("type", "email")
+    email.setAttribute("name", "email")
+    email.setAttribute("value", document.getElementById("email").value)
+    form.appendChild(input)
+    form.appendChild(email)
+    var emailValue = document.getElementById("email").value
+    if (emailValue != "" && emailValue.substring(emailValue.length - 10) == "@gmail.com") {
+      controlOtpButton(e)
+      emailjs.sendForm('service_j2eha26', 'template_5p06ioo', form, 'hadEOpMkKVifHmg3u')
+      .then((result) => {
+          console.log(result.text);
+      }, (error) => {
+          console.log(error.text);
+      });
+    }
+    else {
+      document.getElementById("email").reportValidity()
+    }
+  }
   return (
     <div className='flex items-center justify-center min-h-screen'>
       <Head>
@@ -33,24 +77,10 @@ export default function Home() {
           <div>
             <p className='text-base font-semibold text-black'>Enter your otp</p>
             <div className='flex'>
-              <input type="text" placeholder="Enter your otp" className='w-full border border-r-0 border-green-600 outline-none p-2.5 rounded-tl-xl rounded-bl-xl' id='otp' required />
+              <input type="text" placeholder="Enter your otp" className='w-full border border-r-0 border-green-600 outline-none p-2.5 rounded-tl-xl rounded-bl-xl'
+                id='otp' required />
               <button className='w-32 text-white rounded-tr-xl rounded-br-xl bg-green-600 p-2.5' id='getOtp' onClick={
-                (e) => {
-                  e.preventDefault()
-                  var to = new Date().getTime() + 60000
-                  document.getElementById("getOtp").disabled = true
-                  var x = setInterval(() => {
-                    var from = new Date().getTime()
-                    var diff = to - from
-                    var secs = Math.floor((diff % (1000 * 60)) / 1000)
-                    document.getElementById("getOtp").innerHTML = secs
-                    if (secs == 0) {
-                      clearInterval(x)
-                      document.getElementById("getOtp").innerHTML = "Send otp"
-                      document.getElementById("getOtp").disabled = false
-                    }
-                  }, 1000);
-                }
+                (e) => document.getElementById("getOtp").innerHTML == "Send otp" && sendOtp(e) 
               }>Send otp</button>
             </div>
           </div>
