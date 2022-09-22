@@ -2,6 +2,7 @@ import Head from 'next/head'
 import emailjs from "emailjs-com"
 import { Input, Select, Option, Button, Popover, PopoverContent, PopoverHandler } from "@material-tailwind/react";
 import { KeyIcon } from "@heroicons/react/solid"
+import { QuestionMarkCircleIcon } from "@heroicons/react/outline"
 import { useState } from 'react';
 
 export default function Home() {
@@ -84,7 +85,19 @@ export default function Home() {
               id='email' color='green' onChange={(e) => setEmail(e.target.value)} required />
           </div>
           <div>
-            <p className='text-sm font-semibold text-black'>Enter your activation key</p>
+            <p className='text-sm font-semibold text-black flex items-center space-x-0.5'>
+              <span>Enter your activation key</span>
+              <span>
+                <Popover>
+                  <PopoverHandler>
+                    <QuestionMarkCircleIcon className='w-4 h-4 hover:cursor-pointer' />
+                  </PopoverHandler>
+                  <PopoverContent>
+                    With this code you get a bonus off when registering your account
+                  </PopoverContent>
+                </Popover>
+              </span>
+            </p>
             <div className='flex'>
               <input type="text" placeholder="Enter your activation key" className='w-full border border-r-0 border-gray-400 outline-none px-2.5 rounded-tl-xl rounded-bl-xl'
                 id='otp' required />
