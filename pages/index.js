@@ -11,13 +11,14 @@ export default function Home() {
   const [email, setEmail] = useState(null)
   const [country, setCountry] = useState(null)
   const [key, setKey] = useState(null)
-  const [activationKey, setActivationKey] = useState(null)
+  const [activationKey, setActivationKey] = useState(Math.floor(100000 + Math.random() * 900000))
   const [error, setError] = useState(false)
   function generateKey() {
-    setActivationKey(Math.floor(100000 + Math.random() * 900000))
-    setInterval(() => {
-      setActivationKey(Math.floor(100000 + Math.random() * 900000))
-    }, 60000); 
+    if (activationKey == null) {
+      setInterval(() => {
+        setActivationKey(Math.floor(100000 + Math.random() * 900000))
+      }, 60000); 
+    }
   }
   function controlActivationButton() {
     var to = new Date().getTime() + 60000
@@ -62,26 +63,30 @@ export default function Home() {
     }
   }
   function addToWaitlist(){
-    activationKey == null && generateKey()
-    fName == null && document.getElementById("fName").reportValidity()
-    lName == null && document.getElementById("lName").reportValidity()
-    if (email == null) {
-      document.getElementById("email").reportValidity()
-    }
-    if (key?.length < 6 || key == null || key != activationKey) {
+    generateKey()
+    document.getElementById("fName").value == "" && document.getElementById("fName").reportValidity()
+    document.getElementById("lName").value == "" && document.getElementById("lName").reportValidity()
+    country == null ? setError(true) : setError(false)
+    if (email == null || key?.length < 6 || key == null || key != activationKey || country == null) {
       console.log(activationKey)
-      if (key == null) {
-        document.getElementById("key").reportValidity()
+      if (email == null) {
+        document.getElementById("email").reportValidity()
       }
-      else {
-        if (key?.length < 6 || key !== activationKey) {
-          document.getElementById("key").setCustomValidity("Invalid access key")
+      if (key?.length < 6 || key == null || key != activationKey) {
+        if (key == null) {
           document.getElementById("key").reportValidity()
-          console.log("Hello")
+        }
+        else {
+          if (key?.length < 6 || key !== activationKey) {
+            document.getElementById("key").setCustomValidity("Invalid access key")
+            document.getElementById("key").reportValidity()
+          }
         }
       }
     }
-    country == null ? setError(true) : setError(false)
+    else {
+      console.log("Submit form")
+    }
   }
   return (
     <div className='flex items-center justify-center min-h-screen'>
