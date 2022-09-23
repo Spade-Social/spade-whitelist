@@ -14,11 +14,9 @@ export default function Home() {
   const [activationKey, setActivationKey] = useState(Math.floor(100000 + Math.random() * 900000))
   const [error, setError] = useState(false)
   function generateKey() {
-    if (activationKey == null) {
-      setInterval(() => {
-        setActivationKey(Math.floor(100000 + Math.random() * 900000))
-      }, 60000); 
-    }
+    setInterval(() => {
+      setActivationKey(Math.floor(100000 + Math.random() * 900000))
+    }, 600000); 
   }
   function controlActivationButton() {
     var to = new Date().getTime() + 60000
