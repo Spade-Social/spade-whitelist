@@ -10,6 +10,15 @@ export default function Home() {
   const [lName, setLName] = useState(null)
   const [email, setEmail] = useState(null)
   const [country, setCountry] = useState(null)
+  const [key, setKey] = useState(null)
+  const [activationKey, setActivationKey] = useState(null)
+  const [error, setError] = useState(false)
+  function generateKey() {
+    setActivationKey(Math.floor(100000 + Math.random() * 900000))
+    setInterval(() => {
+      setActivationKey(Math.floor(100000 + Math.random() * 900000))
+    }, 60000); 
+  }
   function controlActivationButton() {
     var to = new Date().getTime() + 60000
       document.getElementById("getOtp").disabled = true
@@ -20,20 +29,20 @@ export default function Home() {
         document.getElementById("getOtp").innerHTML = secs
         if (secs == 0) {
           clearInterval(x)
-          document.getElementById("getOtp").innerHTML = "Send otp"
+          document.getElementById("getOtp").innerHTML = "Get key"
           document.getElementById("getOtp").disabled = false
         }
       }, 1000);
   }
   function sendOtp(e) {
+    generateKey()
     e.preventDefault()
     const form = document.createElement("form")
     const input = document.createElement("input")
     const emailForm = document.createElement("input")
-    var otp = Math.floor(100000 + Math.random() * 900000)
     input.setAttribute("type", "text")
-    input.setAttribute("name", "otp")
-    input.setAttribute("value", otp)
+    input.setAttribute("name", "key")
+    input.setAttribute("value", activationKey)
     emailForm.setAttribute("type", "email")
     emailForm.setAttribute("name", "email")
     emailForm.setAttribute("value", email)
@@ -52,6 +61,28 @@ export default function Home() {
       document.getElementById("email").reportValidity()
     }
   }
+  function addToWaitlist(){
+    activationKey == null && generateKey()
+    fName == null && document.getElementById("fName").reportValidity()
+    lName == null && document.getElementById("lName").reportValidity()
+    if (email == null) {
+      document.getElementById("email").reportValidity()
+    }
+    if (key?.length < 6 || key == null || key != activationKey) {
+      console.log(activationKey)
+      if (key == null) {
+        document.getElementById("key").reportValidity()
+      }
+      else {
+        if (key?.length < 6 || key !== activationKey) {
+          document.getElementById("key").setCustomValidity("Invalid access key")
+          document.getElementById("key").reportValidity()
+          console.log("Hello")
+        }
+      }
+    }
+    country == null ? setError(true) : setError(false)
+  }
   return (
     <div className='flex items-center justify-center min-h-screen'>
       <Head>
@@ -69,9 +100,9 @@ export default function Home() {
           </div>
           <p className='text-sm font-semibold text-center lg:text-start'>3,5301 people is on the waitlist</p>
         </div>
-        <form className='flex-1 max-w-auto p-5 space-y-2 shadow-2xl rounded-2xl shadow-zinc-400'>
+        <div className='flex-1 max-w-auto p-5 space-y-2 shadow-2xl rounded-2xl shadow-zinc-400'>
           <div className='space-y-1'>
-            <p className='text-sm font-semibold text-black'>Enter your name</p>
+            <p className='text-xs font-semibold text-black'>Enter your name</p>
             <div className='w-full flex flex-col sm:flex-row space-y-2.5 sm:space-y-0 sm:space-x-2.5'>
               <Input type="text" label="Enter your first name" className='w-full border border-green-600 outline-none p-2.5 rounded-xl'
                 id='fName' color='green' onChange={(e) => setFName(e.target.value)} required />
@@ -80,12 +111,12 @@ export default function Home() {
             </div>    
           </div>
           <div>
-            <p className='text-sm font-semibold text-black'>Enter your email</p>
+            <p className='text-xs font-semibold text-black'>Enter your email</p>
             <Input type="email" label="Enter your email" className='w-full border border-green-600 outline-none p-2.5 rounded-xl'
               id='email' color='green' onChange={(e) => setEmail(e.target.value)} required />
           </div>
           <div>
-            <p className='text-sm font-semibold text-black flex items-center space-x-0.5'>
+            <p className='text-xs font-semibold text-black flex items-center space-x-0.5'>
               <span>Enter your activation key</span>
               <span>
                 <Popover>
@@ -99,8 +130,8 @@ export default function Home() {
               </span>
             </p>
             <div className='flex'>
-              <input type="text" placeholder="Enter your activation key" className='w-full border border-r-0 border-gray-400 outline-none px-2.5 rounded-tl-xl rounded-bl-xl'
-                id='otp' required />
+              <input type="number" placeholder="Enter your activation key" className='w-full border border-r-0 border-gray-400 outline-none px-2.5 rounded-tl-xl rounded-bl-xl'
+                onChange={(e) => setKey(e.target.value)} maxLength={6} minLength={6} id="key" required />
               <button className='w-[150px] text-xs sm:text-base text-white rounded-tr-xl rounded-br-xl bg-green-600 p-2.5 flex items-center justify-center' onClick={
                 (e) => {
                   e.preventDefault()
@@ -110,8 +141,8 @@ export default function Home() {
             </div>
           </div>
           <div className='space-y-1'>
-            <p className='text-sm font-semibold text-black'>Select your country</p>
-            <Select variant="outlined" label="Select Country" color='green' id='country' onChange={(e) => setCountry(e)} required>
+            <p className='text-xs font-semibold text-black'>Select your country</p>
+            <Select variant="outlined" label="Select Country" color='green' id='country' onChange={(e) => setCountry(e)} error={error} required>
                 <Option value="Afghanistan">Afghanistan</Option>
                 <Option value="Åland Islands">Åland Islands</Option>
                 <Option value="Albania">Albania</Option>
@@ -360,30 +391,9 @@ export default function Home() {
           </div>
           <div>
           </div>
-          <Popover>
-            <PopoverHandler>
-              <Button type='submit' className='w-full font-normal tracking-widest bg-green-600 text-white text-md rounded-xl p-2.5' id='join' onClick={(e) => {
-                e.preventDefault()
-                if (document.getElementById("fName").value == "") {
-                  document.getElementById("fName").reportValidity()
-                }
-                if (document.getElementById("lName").value == "") {
-                  document.getElementById("lName").reportValidity()
-                }
-                if (document.getElementById("email").value == "" ||
-                  document.getElementById("email").value.substring(document.getElementById("email").value.length - 10) != "@gmail.com") {
-                  document.getElementById("email").reportValidity()
-                }
-                if (document.getElementById("otp").value == "") {
-                  document.getElementById("otp").reportValidity()
-                }
-              }}>Join Waitlist</Button>
-              </PopoverHandler>
-              {
-                country == null && <PopoverContent>Select a country</PopoverContent>
-              }
-          </Popover>
-        </form>
+            <Button className='w-full font-normal tracking-widest bg-green-600 text-white text-md rounded-xl p-2.5' id='join'
+              onClick={() => addToWaitlist()}>Join Waitlist</Button>
+        </div>
       </div>
     </div>
   )
