@@ -83,7 +83,16 @@ export default function Home() {
       }
     }
     else {
-      console.log("Submit form")
+      var name = fName + " " + lName
+      const data = { name, email, activationKey, country }
+      fetch("/api/addUser", {
+        method: "POST",
+        body: JSON.stringify(data)
+      }).then(() => {
+        console.log(data)
+      }).catch(err => {
+        console.log(err)
+      })
     }
   }
   return (
