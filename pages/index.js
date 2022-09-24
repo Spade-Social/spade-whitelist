@@ -100,7 +100,7 @@ export default function Home({ res }) {
             }
           `
           const result = await sanityClient.fetch(query)
-          result.length > 1 ? `${length} people are on this waitlist` : result.length == 0 ? "Nobody is on this waitlist" : "1 person is on this waitlist"
+          result?.length > 1 ? `${length} people are on this waitlist` : result?.length == 0 ? "Nobody is on this waitlist" : "1 person is on this waitlist"
         }
       }).catch(() => {
         document.getElementById("join").innerHTML = "Error adding user to waitlist!"
