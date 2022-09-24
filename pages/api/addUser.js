@@ -16,7 +16,6 @@ export default async function createUser(req, res){
             email
         }
     `
-    console.log(email)
     const result = await client.fetch(query)
     if (result.length == 0) {
         try {

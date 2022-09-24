@@ -4,8 +4,10 @@ import { Input, Select, Option, Button, Popover, PopoverContent, PopoverHandler 
 import { KeyIcon } from "@heroicons/react/solid"
 import { QuestionMarkCircleIcon } from "@heroicons/react/outline"
 import { useState } from 'react';
+import { sanityClient } from "../sanity"
 
-export default function Home() {
+export default function Home({ res }) {
+  var length = res?.length
   const [fName, setFName] = useState(null)
   const [lName, setLName] = useState(null)
   const [email, setEmail] = useState(null)
@@ -66,7 +68,6 @@ export default function Home() {
     document.getElementById("lName").value == "" && document.getElementById("lName").reportValidity()
     country == null ? setError(true) : setError(false)
     if (email == null || key?.length < 6 || key == null || key != activationKey || country == null) {
-      console.log(activationKey)
       if (email == null) {
         document.getElementById("email").reportValidity()
       }
@@ -90,12 +91,13 @@ export default function Home() {
         method: "POST",
         body: JSON.stringify(data)
       }).then(result => {
-        console.log(result)
         result.status == 200 ? document.getElementById("join").innerHTML = "User added to waitlist!" :
         result.status == 400 ? document.getElementById("join").innerHTML = "User already exists!" :
         document.getElementById("join").innerHTML = "Error adding user to waitlist!"
-      }).catch(err => {
-        console.log(err)
+        result.status == 200 ? 
+          document.getElementById("count").innerHTML = length == 0 ? `${length + 1} person is on this waitlist` : `${length + 1} people are on this waitlist` : ""
+      }).catch(() => {
+        document.getElementById("join").innerHTML = "Error adding user to waitlist!"
       })
     }
   }
@@ -114,21 +116,25 @@ export default function Home() {
             <img src="/logo.png" layout='intrinsic' alt='Spade Logo' className='w-12 lg:w-18' />
             <h1 className='text-4xl font-bold tracking-widest text-center text-black lg:text-8xl lg:text-start'>SPADE</h1>
           </div>
-          <p className='text-sm font-semibold text-center lg:text-start'>3,5301 people is on the waitlist</p>
+          <p className='text-sm font-semibold text-center lg:text-start' id='count'>
+            {
+              length > 1 ? `${length} people are on this waitlist` : length == 0 ? "Nobody is on this waitlist" : "1 person is on this waitlist"
+            }
+          </p>
         </div>
         <div className='flex-1 max-w-auto p-5 space-y-2 shadow-2xl rounded-2xl shadow-zinc-400'>
           <div className='space-y-1'>
             <p className='text-xs font-semibold text-black'>Enter your name</p>
             <div className='w-full flex flex-col sm:flex-row space-y-2.5 sm:space-y-0 sm:space-x-2.5'>
-              <Input type="text" label="Enter your first name" className='w-full border border-green-600 outline-none p-2.5 rounded-xl'
+              <Input type="text" label="First name" className='w-full border border-green-600 outline-none p-2.5 rounded-xl'
                 id='fName' color='green' onChange={(e) => setFName(e.target.value)} required />
-              <Input type="text" label="Enter your last name" className='w-full border border-green-600 outline-none p-2.5 rounded-xl'
+              <Input type="text" label="Last name" className='w-full border border-green-600 outline-none p-2.5 rounded-xl'
                 id='lName' color='green' onChange={(e) => setLName(e.target.value)} required />
             </div>    
           </div>
           <div>
             <p className='text-xs font-semibold text-black'>Enter your email</p>
-            <Input type="email" label="Enter your email" className='w-full border border-green-600 outline-none p-2.5 rounded-xl'
+            <Input type="email" label="Email address" className='w-full border border-green-600 outline-none p-2.5 rounded-xl'
               id='email' color='green' onChange={(e) => setEmail(e.target.value)} required />
           </div>
           <div>
@@ -158,7 +164,7 @@ export default function Home() {
           </div>
           <div className='space-y-1'>
             <p className='text-xs font-semibold text-black'>Select your country</p>
-            <Select variant="outlined" label="Select Country" color='green' id='country' onChange={(e) => setCountry(e)} error={error} required>
+            <Select variant="outlined" label="Country" color='green' id='country' onChange={(e) => setCountry(e)} error={error} required>
                 <Option value="Afghanistan">Afghanistan</Option>
                 <Option value="Åland Islands">Åland Islands</Option>
                 <Option value="Albania">Albania</Option>
@@ -413,4 +419,18 @@ export default function Home() {
       </div>
     </div>
   )
+}
+
+export async function getServerSideProps() {
+  const query = `
+        *[_type == "user"]{
+            email
+        }
+    `
+  const result = await sanityClient.fetch(query)
+  return {
+    props: {
+      res: result
+    }
+  }
 }
