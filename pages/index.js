@@ -4,9 +4,8 @@ import { Input, Select, Option, Button, Popover, PopoverContent, PopoverHandler 
 import { KeyIcon } from "@heroicons/react/solid"
 import { QuestionMarkCircleIcon } from "@heroicons/react/outline"
 import { useState } from 'react';
-import { sanityClient } from "../sanity"
 
-export default function Home({ res }) {
+export default function Home() {
   const [fName, setFName] = useState(null)
   const [lName, setLName] = useState(null)
   const [email, setEmail] = useState(null)
@@ -113,11 +112,6 @@ export default function Home({ res }) {
             <img src="/logo.png" layout='intrinsic' alt='Spade Logo' className='w-12 lg:w-18' />
             <h1 className='text-4xl font-bold tracking-widest text-center text-black lg:text-8xl lg:text-start'>SPADE</h1>
           </div>
-          <p className='text-sm font-semibold text-center lg:text-start' id='count'>
-            {
-              res > 1 ? `${length} people are on this waitlist` : res == 0 ? "Nobody is on this waitlist" : "1 person is on this waitlist"
-            }
-          </p>
         </div>
         <div className='flex-1 max-w-auto p-5 space-y-2 shadow-2xl rounded-2xl shadow-zinc-400'>
           <div className='space-y-1'>
@@ -416,18 +410,4 @@ export default function Home({ res }) {
       </div>
     </div>
   )
-}
-
-export async function getServerSideProps() {
-  const query = `
-        *[_type == "user"]{
-            email
-        }
-    `
-  const result = await sanityClient.fetch(query)
-  return {
-    props: {
-      res: result
-    }
-  }
 }
