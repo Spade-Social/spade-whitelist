@@ -93,15 +93,6 @@ export default function Home({ res }) {
         result.status == 200 ? document.getElementById("join").innerHTML = "User added to waitlist!" :
         result.status == 400 ? document.getElementById("join").innerHTML = "User already exists!" :
         document.getElementById("join").innerHTML = "Error adding user to waitlist!"
-        if (result.status == 200) {
-            const query = `
-            *[_type == "user"]{
-                email
-            }
-          `
-          const result = await sanityClient.fetch(query)
-          result?.length > 1 ? `${length} people are on this waitlist` : result?.length == 0 ? "Nobody is on this waitlist" : "1 person is on this waitlist"
-        }
       }).catch(() => {
         document.getElementById("join").innerHTML = "Error adding user to waitlist!"
       })
