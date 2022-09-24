@@ -7,7 +7,6 @@ import { useState } from 'react';
 import { sanityClient } from "../sanity"
 
 export default function Home({ res }) {
-  var length = res?.length
   const [fName, setFName] = useState(null)
   const [lName, setLName] = useState(null)
   const [email, setEmail] = useState(null)
@@ -90,12 +89,19 @@ export default function Home({ res }) {
       fetch("/api/addUser", {
         method: "POST",
         body: JSON.stringify(data)
-      }).then(result => {
+      }).then(async result => {
         result.status == 200 ? document.getElementById("join").innerHTML = "User added to waitlist!" :
         result.status == 400 ? document.getElementById("join").innerHTML = "User already exists!" :
         document.getElementById("join").innerHTML = "Error adding user to waitlist!"
-        result.status == 200 ? 
-          document.getElementById("count").innerHTML = length == 0 ? `${length + 1} person is on this waitlist` : `${length + 1} people are on this waitlist` : ""
+        if (result.status == 200) {
+            const query = `
+            *[_type == "user"]{
+                email
+            }
+          `
+          const result = await sanityClient.fetch(query)
+          result.length > 1 ? `${length} people are on this waitlist` : result.length == 0 ? "Nobody is on this waitlist" : "1 person is on this waitlist"
+        }
       }).catch(() => {
         document.getElementById("join").innerHTML = "Error adding user to waitlist!"
       })
@@ -118,7 +124,7 @@ export default function Home({ res }) {
           </div>
           <p className='text-sm font-semibold text-center lg:text-start' id='count'>
             {
-              length > 1 ? `${length} people are on this waitlist` : length == 0 ? "Nobody is on this waitlist" : "1 person is on this waitlist"
+              res > 1 ? `${length} people are on this waitlist` : res == 0 ? "Nobody is on this waitlist" : "1 person is on this waitlist"
             }
           </p>
         </div>
