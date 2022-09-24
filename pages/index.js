@@ -85,11 +85,15 @@ export default function Home() {
     else {
       var name = fName + " " + lName
       const data = { name, email, activationKey, country }
+      document.getElementById("join").innerHTML = "Joining..."
       fetch("/api/addUser", {
         method: "POST",
         body: JSON.stringify(data)
-      }).then(() => {
-        console.log(data)
+      }).then(result => {
+        console.log(result)
+        result.status == 200 ? document.getElementById("join").innerHTML = "User added to waitlist!" :
+        result.status == 400 ? document.getElementById("join").innerHTML = "User already exists!" :
+        document.getElementById("join").innerHTML = "Error adding user to waitlist!"
       }).catch(err => {
         console.log(err)
       })
