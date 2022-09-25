@@ -416,7 +416,7 @@ export default function Home() {
           </div>
             <div>
               <p className='text-xs font-semibold text-black flex items-center space-x-0.5'>
-                <span>Enter your code</span>
+                <span>Enter your code {`${"(You will receive this in your email address)"}`}</span>
                 <span>
                   <Popover>
                     <PopoverHandler>
