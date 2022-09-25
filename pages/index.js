@@ -415,19 +415,7 @@ export default function Home() {
             </Select>
           </div>
             <div>
-              <p className='text-xs font-semibold text-black flex items-center space-x-0.5'>
-                <span>Enter your activation key</span>
-                <span>
-                  <Popover>
-                    <PopoverHandler>
-                      <QuestionMarkCircleIcon className='w-4 h-4 hover:cursor-pointer' />
-                    </PopoverHandler>
-                    <PopoverContent>
-                      With this code you get a bonus off when registering your account
-                    </PopoverContent>
-                  </Popover>
-                </span>
-              </p>
+              <p className='text-xs font-semibold text-black flex items-center space-x-0.5'>Enter your code</p>
             </div>
             <div className='flex'>
               <input type="number" placeholder="Enter your activation key" className='w-full border border-r-0 border-gray-400 outline-none px-2.5 rounded-tl-xl rounded-bl-xl'
