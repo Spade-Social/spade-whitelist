@@ -17,12 +17,12 @@ export default function Home() {
   function generateKey() {
     setInterval(() => {
       setActivationKey(Math.floor(100000 + Math.random() * 900000))
-    }, 600000); 
+    }, 1200000); 
   }
   function generateOtp() {
     setInterval(() => {
       setOtp(Math.floor(100000 + Math.random() * 900000))
-    }, 600000); 
+    }, 1200000); 
   }
   function controlOtpButton() {
     var to = new Date().getTime() + 60000
@@ -415,7 +415,19 @@ export default function Home() {
             </Select>
           </div>
             <div>
-              <p className='text-xs font-semibold text-black flex items-center space-x-0.5'>Enter your code</p>
+              <p className='text-xs font-semibold text-black flex items-center space-x-0.5'>
+                <span>Enter your code</span>
+                <span>
+                  <Popover>
+                    <PopoverHandler>
+                      <QuestionMarkCircleIcon className='w-4 h-4 hover:cursor-pointer' />
+                    </PopoverHandler>
+                    <PopoverContent>
+                      With the activation code you get after joining the waitlist you can use it to receive a bonus on the spade application
+                    </PopoverContent>
+                  </Popover>
+                </span>
+              </p>
             </div>
             <div className='flex'>
               <input type="number" placeholder="Enter your activation key" className='w-full border border-r-0 border-gray-400 outline-none px-2.5 rounded-tl-xl rounded-bl-xl'
