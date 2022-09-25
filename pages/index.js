@@ -9,7 +9,6 @@ export default function Home() {
   const [fName, setFName] = useState(null)
   const [lName, setLName] = useState(null)
   const [email, setEmail] = useState(null)
-  const [added, setAdded] = useState(false)
   const [confirmed, setConfirmed] = useState(false)
   const [country, setCountry] = useState(null)
   const [key, setKey] = useState(null)
@@ -125,7 +124,6 @@ export default function Home() {
       }).then(async result => {
         if (result.status == 200) {
           sendKey()
-          setAdded(true)
           document.getElementById("join").innerHTML = "User added to waitlist!"
         }
         else if (result.status == 400) {
@@ -433,12 +431,12 @@ export default function Home() {
               </p>
             </div>
             <div className='flex'>
-              <input type="number" placeholder="Enter your activation key" className='w-full border focus:border-2 border-r-0 bg-transparent text-gray-700 focus:border-green-500 border-gray-400 outline-none px-2.5 rounded-tl-xl rounded-bl-xl'
+              <input type="number" placeholder="Enter your activation key" className='w-full border border-r-0 bg-transparent text-gray-700 focus:border-green-500 border-gray-400 outline-none px-2.5 rounded-tl-xl rounded-bl-xl'
                 onChange={(e) => {
                   setKey(e.target.value)
                   e.target.value == otp ? setConfirmed(true) : setConfirmed(false)
                 }} maxLength={6} minLength={6} id="key" required />
-              <button className='w-[150px] text-xs sm:text-base text-black rounded-tr-xl rounded-br-xl bg-green-600 p-2.5 flex items-center justify-center' onClick={
+              <button className={`w-[150px] text-xs sm:text-base text-black rounded-tr-xl rounded-br-xl ${confirmed ? "bg-green-500" : "bg-gray-300"} p-2.5 flex items-center justify-center`} onClick={
                 (e) => {
                   e.preventDefault()
                   document.getElementById("getOtp").innerHTML == "Get code" && sendOtp(e) 
@@ -447,7 +445,7 @@ export default function Home() {
             </div>
           <div>
           </div>
-            <Button className={`w-full font-normal tracking-widest ${added ? "bg-green-500" : "bg-gray-300"} text-black text-md rounded-xl p-2.5`} id='join'
+            <Button className={`w-full font-normal tracking-widest ${confirmed ? "bg-green-500" : "bg-gray-300"} text-black text-md rounded-xl p-2.5`} id='join'
               onClick={(e) => addToWaitlist(e)}>Join Waitlist</Button>
         </div>
       </div>
