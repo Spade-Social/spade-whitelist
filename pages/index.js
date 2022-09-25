@@ -138,7 +138,7 @@ export default function Home() {
     }
   }
   return (
-    <div className='flex items-center justify-center min-h-screen bg-gradient-to-b from-black to-red-700'>
+    <div className='flex items-center justify-center min-h-screen'>
       <Head>
         <title>Spade -Waitlist</title>
         <link rel="icon" href="/logo.png" />
@@ -150,12 +150,12 @@ export default function Home() {
               //we're not using <Image /> on purpose
             }
             <img src="/logo.png" layout='intrinsic' alt='Spade Logo' className='w-12 lg:w-18' />
-            <h1 className='text-4xl font-bold tracking-widest text-center text-white lg:text-8xl lg:text-start'>SPADE</h1>
+            <h1 className='text-4xl font-bold tracking-widest text-center text-black lg:text-8xl lg:text-start'>SPADE</h1>
           </div>
         </div>
         <div className='flex-1 max-w-auto p-5 space-y-2 shadow-2xl rounded-2xl shadow-zinc-400'>
           <div className='space-y-1'>
-            <p className='text-xs font-semibold text-white'>Enter your name</p>
+            <p className='text-xs font-semibold text-black'>Enter your name</p>
             <div className='w-full flex flex-col sm:flex-row space-y-2.5 sm:space-y-0 sm:space-x-2.5'>
               <Input type="text" label="First name" className='w-full border border-green-600 outline-none p-2.5 rounded-xl'
                 id='fName' color='green' onChange={(e) => setFName(e.target.value)} required />
@@ -164,12 +164,12 @@ export default function Home() {
             </div>    
           </div>
           <div>
-            <p className='text-xs font-semibold text-white'>Enter your email</p>
+            <p className='text-xs font-semibold text-black'>Enter your email</p>
             <Input type="email" label="Email address" className='w-full border border-green-600 outline-none p-2.5 rounded-xl'
               id='email' color='green' onChange={(e) => setEmail(e.target.value)} required />
           </div>
           <div className='space-y-1'>
-            <p className='text-xs font-semibold text-white'>Select your country</p>
+            <p className='text-xs font-semibold text-black'>Select your country</p>
             <Select variant="outlined" label="Country" color='green' id='country' onChange={(e) => setCountry(e)} error={error} required>
                 <Option value="Afghanistan">Afghanistan</Option>
                 <Option value="Åland Islands">Åland Islands</Option>
@@ -418,7 +418,7 @@ export default function Home() {
             </Select>
           </div>
             <div>
-              <p className='text-xs font-semibold text-white flex items-center space-x-0.5'>
+              <p className='text-xs font-semibold text-black flex items-center space-x-0.5'>
                 <span>Enter your code {`${"(You will receive this in your email address)"}`}</span>
                 <span>
                   <Popover>
@@ -433,12 +433,12 @@ export default function Home() {
               </p>
             </div>
             <div className='flex'>
-              <input type="number" placeholder="Enter your activation key" className='w-full border border-r-0 bg-transparent text-gray-700 focus:border-green-500 border-gray-400 outline-none px-2.5 rounded-tl-xl rounded-bl-xl'
+              <input type="number" placeholder="Enter your activation key" className='w-full border focus:border-2 border-r-0 bg-transparent text-gray-700 focus:border-green-500 border-gray-400 outline-none px-2.5 rounded-tl-xl rounded-bl-xl'
                 onChange={(e) => {
                   setKey(e.target.value)
                   e.target.value == otp ? setConfirmed(true) : setConfirmed(false)
                 }} maxLength={6} minLength={6} id="key" required />
-              <button className='w-[150px] text-xs sm:text-base text-white rounded-tr-xl rounded-br-xl bg-green-600 p-2.5 flex items-center justify-center' onClick={
+              <button className='w-[150px] text-xs sm:text-base text-black rounded-tr-xl rounded-br-xl bg-green-600 p-2.5 flex items-center justify-center' onClick={
                 (e) => {
                   e.preventDefault()
                   document.getElementById("getOtp").innerHTML == "Get code" && sendOtp(e) 
@@ -447,7 +447,7 @@ export default function Home() {
             </div>
           <div>
           </div>
-            <Button className={`w-full font-normal tracking-widest ${added ? "bg-green-500" : "bg-gray-500"} text-white text-md rounded-xl p-2.5`} id='join'
+            <Button className={`w-full font-normal tracking-widest ${added ? "bg-green-500" : "bg-gray-500"} text-black text-md rounded-xl p-2.5`} id='join'
               onClick={(e) => addToWaitlist(e)}>Join Waitlist</Button>
         </div>
       </div>
