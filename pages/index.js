@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import emailjs from "emailjs-com"
 import { Input, Select, Option, Button, Popover, PopoverContent, PopoverHandler } from "@material-tailwind/react";
-import { KeyIcon } from "@heroicons/react/solid"
+import { KeyIcon, CheckIcon } from "@heroicons/react/solid"
 import { QuestionMarkCircleIcon } from "@heroicons/react/outline"
 import { useState } from 'react';
 
@@ -10,10 +10,11 @@ export default function Home() {
   const [lName, setLName] = useState(null)
   const [email, setEmail] = useState(null)
   const [added, setAdded] = useState(false)
+  const [confirmed, setConfirmed] = useState(false)
   const [country, setCountry] = useState(null)
   const [key, setKey] = useState(null)
   const [activationKey, setActivationKey] = useState(Math.floor(100000 + Math.random() * 900000))
-  const [top, setOtp] = useState(Math.floor(100000 + Math.random() * 900000))
+  const [otp, setOtp] = useState(Math.floor(100000 + Math.random() * 900000))
   const [error, setError] = useState(false)
   function generateKey() {
     setInterval(() => {
@@ -48,7 +49,7 @@ export default function Home() {
     const emailForm = document.createElement("input")
     input.setAttribute("type", "text")
     input.setAttribute("name", "otp")
-    input.setAttribute("value", activationKey)
+    input.setAttribute("value", otp)
     emailForm.setAttribute("type", "email")
     emailForm.setAttribute("name", "email")
     emailForm.setAttribute("value", email)
@@ -98,16 +99,16 @@ export default function Home() {
     document.getElementById("fName").value == "" && document.getElementById("fName").reportValidity()
     document.getElementById("lName").value == "" && document.getElementById("lName").reportValidity()
     country == null ? setError(true) : setError(false)
-    if (email == null || key?.length < 6 || key == null || key != activationKey || country == null) {
+    if (email == null || key?.length < 6 || key == null || key != otp || country == null) {
       if (email == null) {
         document.getElementById("email").reportValidity()
       }
-      if (key?.length < 6 || key == null || key != activationKey) {
+      if (key?.length < 6 || key == null || key != otp) {
         if (key == null) {
           document.getElementById("key").reportValidity()
         }
         else {
-          if (key?.length < 6 || key !== activationKey) {
+          if (key?.length < 6 || key !== otp) {
             document.getElementById("key").setCustomValidity("Invalid access key")
             document.getElementById("key").reportValidity()
           }
@@ -433,13 +434,16 @@ export default function Home() {
             </div>
             <div className='flex'>
               <input type="number" placeholder="Enter your activation key" className='w-full border border-r-0 border-gray-400 outline-none px-2.5 rounded-tl-xl rounded-bl-xl'
-                onChange={(e) => setKey(e.target.value)} maxLength={6} minLength={6} id="key" required />
+                onChange={(e) => {
+                  setKey(e.target.value)
+                  e.target.value == otp ? setConfirmed(true) : setConfirmed(false)
+                }} maxLength={6} minLength={6} id="key" required />
               <button className='w-[150px] text-xs sm:text-base text-white rounded-tr-xl rounded-br-xl bg-green-600 p-2.5 flex items-center justify-center' onClick={
                 (e) => {
                   e.preventDefault()
                   document.getElementById("getOtp").innerHTML == "Get code" && sendOtp(e) 
                 } 
-              }><span id='getOtp'>Get code</span><span><KeyIcon className='w-4 h-4 sm:w-6 sm:h-6' /></span></button>
+              }><span id='getOtp'>Get code</span><span>{confirmed ? <CheckIcon className='w-4 h-4 sm:w-6 sm:h-6' /> : <KeyIcon className='w-4 h-4 sm:w-6 sm:h-6' />}</span></button>
             </div>
           <div>
           </div>
