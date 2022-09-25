@@ -34,7 +34,7 @@ export default function Home() {
         var secs = Math.floor((diff % (1000 * 60)) / 1000)
         var mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         document.getElementById("getOtp").innerHTML = mins + " : " + secs
-        if (secs == 0) {
+        if (secs <= 0) {
           clearInterval(x)
           document.getElementById("getOtp").innerHTML = "Send code"
           document.getElementById("getOtp").disabled = false
