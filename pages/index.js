@@ -60,7 +60,7 @@ export default function Home() {
     form.appendChild(emailForm)
     if (email != "" && email?.substring(email.length - 10) == "@gmail.com") {
       controlOtpButton()
-      emailjs.sendForm('service_zmr15d3', 'template_6ngnu1t', form, 'hadEOpMkKVifHmg3u')
+      emailjs.sendForm('service_zmr15d3', 'template_6ngnu1t', form, 'TyE0_8NsEZDb2q8U1')
       .then((result) => {
           console.log(result.text);
       }, (error) => {
