@@ -447,7 +447,7 @@ export default function Home() {
             </div>
           <div>
           </div>
-            <Button className={`w-full font-normal tracking-widest ${added ? "bg-green-500" : "bg-gray-500"} text-black text-md rounded-xl p-2.5`} id='join'
+            <Button className={`w-full font-normal tracking-widest ${added ? "bg-green-500" : "bg-gray-300"} text-black text-md rounded-xl p-2.5`} id='join'
               onClick={(e) => addToWaitlist(e)}>Join Waitlist</Button>
         </div>
       </div>
