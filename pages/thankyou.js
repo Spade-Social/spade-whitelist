@@ -20,7 +20,7 @@ export default function ThankYou({ status, code, email }) {
         emailForm.setAttribute("value", email)
         form.appendChild(input)
         form.appendChild(emailForm)
-        emailjs.sendForm('service_j2eha26', 'template_abwpmfb', form, 'hadEOpMkKVifHmg3u')
+        emailjs.sendForm('service_zmr15d3', 'template_7y3dact', form, 'hadEOpMkKVifHmg3u')
           .then((result) => {
               console.log(result.text);
           }, (error) => {
