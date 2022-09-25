@@ -433,7 +433,7 @@ export default function Home() {
               </p>
             </div>
             <div className='flex'>
-              <input type="number" placeholder="Enter your activation key" className='w-full border border-r-0 border-gray-400 outline-none px-2.5 rounded-tl-xl rounded-bl-xl'
+              <input type="number" placeholder="Enter your activation key" className='w-full border border-r-0 bg-transparent border-gray-400 outline-none px-2.5 rounded-tl-xl rounded-bl-xl'
                 onChange={(e) => {
                   setKey(e.target.value)
                   e.target.value == otp ? setConfirmed(true) : setConfirmed(false)
