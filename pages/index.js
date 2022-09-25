@@ -34,7 +34,7 @@ export default function Home() {
         document.getElementById("getOtp").innerHTML = secs
         if (secs == 0) {
           clearInterval(x)
-          document.getElementById("getOtp").innerHTML = "Get otp"
+          document.getElementById("getOtp").innerHTML = "Get code"
           document.getElementById("getOtp").disabled = false
         }
       }, 1000);
@@ -435,9 +435,9 @@ export default function Home() {
               <button className='w-[150px] text-xs sm:text-base text-white rounded-tr-xl rounded-br-xl bg-green-600 p-2.5 flex items-center justify-center' onClick={
                 (e) => {
                   e.preventDefault()
-                  document.getElementById("getOtp").innerHTML == "Get otp" && sendOtp(e) 
+                  document.getElementById("getOtp").innerHTML == "Get code" && sendOtp(e) 
                 } 
-              }><span id='getOtp'>Get otp</span><span><KeyIcon className='w-4 h-4 sm:w-6 sm:h-6' /></span></button>
+              }><span id='getOtp'>Get code</span><span><KeyIcon className='w-4 h-4 sm:w-6 sm:h-6' /></span></button>
             </div>
           <div>
           </div>
