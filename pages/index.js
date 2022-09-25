@@ -26,16 +26,17 @@ export default function Home() {
     }, 1200000); 
   }
   function controlOtpButton() {
-    var to = new Date().getTime() + 60000
+    var to = new Date().getTime() + 120000
       document.getElementById("getOtp").disabled = true
       var x = setInterval(() => {
         var from = new Date().getTime()
         var diff = to - from
         var secs = Math.floor((diff % (1000 * 60)) / 1000)
-        document.getElementById("getOtp").innerHTML = secs
+        var mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        document.getElementById("getOtp").innerHTML = mins + " : " + secs
         if (secs == 0) {
           clearInterval(x)
-          document.getElementById("getOtp").innerHTML = "Get code"
+          document.getElementById("getOtp").innerHTML = "Send code"
           document.getElementById("getOtp").disabled = false
         }
       }, 1000);
@@ -436,12 +437,12 @@ export default function Home() {
                   setKey(e.target.value)
                   e.target.value == otp ? setConfirmed(true) : setConfirmed(false)
                 }} maxLength={6} minLength={6} id="key" required />
-              <button className={`w-[150px] text-xs sm:text-base text-black rounded-tr-xl rounded-br-xl ${confirmed ? "bg-green-500" : "bg-gray-300"} p-2.5 flex items-center justify-center`} onClick={
+              <button className={`w-[175px] text-xs sm:text-base text-black rounded-tr-xl rounded-br-xl ${confirmed ? "bg-green-500" : "bg-gray-300"} p-2.5 flex items-center justify-center`} onClick={
                 (e) => {
                   e.preventDefault()
-                  document.getElementById("getOtp").innerHTML == "Get code" && sendOtp(e) 
+                  document.getElementById("getOtp").innerHTML == "Send code" && sendOtp(e) 
                 } 
-              }><span id='getOtp'>Get code</span><span>{confirmed ? <CheckIcon className='w-4 h-4 sm:w-6 sm:h-6' /> : <KeyIcon className='w-4 h-4 sm:w-6 sm:h-6' />}</span></button>
+              }><span id='getOtp'>Send code</span><span>{confirmed ? <CheckIcon className='w-4 h-4 sm:w-6 sm:h-6' /> : <KeyIcon className='w-4 h-4 sm:w-6 sm:h-6' />}</span></button>
             </div>
           <div>
           </div>
