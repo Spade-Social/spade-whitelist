@@ -9,6 +9,7 @@ export default function Home() {
   const [fName, setFName] = useState(null)
   const [lName, setLName] = useState(null)
   const [email, setEmail] = useState(null)
+  const [added, setAdded] = useState(false)
   const [country, setCountry] = useState(null)
   const [key, setKey] = useState(null)
   const [activationKey, setActivationKey] = useState(Math.floor(100000 + Math.random() * 900000))
@@ -123,6 +124,7 @@ export default function Home() {
       }).then(async result => {
         if (result.status == 200) {
           sendKey()
+          setAdded(true)
           document.getElementById("join").innerHTML = "User added to waitlist!"
         }
         else if (result.status == 400) {
@@ -441,7 +443,7 @@ export default function Home() {
             </div>
           <div>
           </div>
-            <Button className='w-full font-normal tracking-widest bg-green-600 text-white text-md rounded-xl p-2.5' id='join'
+            <Button className={`w-full font-normal tracking-widest ${added ? "bg-green-500" : "bg-gray-500"} text-white text-md rounded-xl p-2.5`} id='join'
               onClick={(e) => addToWaitlist(e)}>Join Waitlist</Button>
         </div>
       </div>
