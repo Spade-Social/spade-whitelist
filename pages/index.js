@@ -423,7 +423,7 @@ export default function Home() {
                       <QuestionMarkCircleIcon className='w-4 h-4 hover:cursor-pointer' />
                     </PopoverHandler>
                     <PopoverContent>
-                      With the activation code you get after joining the waitlist you can use it to receive a bonus on the spade application
+                      With the activation code you get in your email after joining the waitlist you can use it to receive a bonus on the spade application
                     </PopoverContent>
                   </Popover>
                 </span>
