@@ -4,6 +4,8 @@ import { Input, Select, Option, Button, Popover, PopoverContent, PopoverHandler 
 import { KeyIcon, CheckIcon } from "@heroicons/react/solid"
 import { QuestionMarkCircleIcon } from "@heroicons/react/outline"
 import { useState } from 'react';
+import { useRouter } from 'next/router';
+import SpadeHead from '../components/SpadeHead';
 
 export default function Home() {
   const [fName, setFName] = useState(null)
@@ -15,6 +17,7 @@ export default function Home() {
   const [activationKey, setActivationKey] = useState(Math.floor(100000 + Math.random() * 900000))
   const [otp, setOtp] = useState(Math.floor(100000 + Math.random() * 900000))
   const [error, setError] = useState(false)
+  const router = useRouter()
   function generateKey() {
     setInterval(() => {
       setActivationKey(Math.floor(100000 + Math.random() * 900000))
@@ -34,7 +37,7 @@ export default function Home() {
         var secs = Math.floor((diff % (1000 * 60)) / 1000)
         var mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         document.getElementById("getOtp").innerHTML = mins + " : " + secs
-        if (secs <= 0) {
+        if (diff <= 0) {
           clearInterval(x)
           document.getElementById("getOtp").innerHTML = "Send code"
           document.getElementById("getOtp").disabled = false
@@ -68,33 +71,8 @@ export default function Home() {
       document.getElementById("email").reportValidity()
     }
   }
-  function sendKey() {
-    generateOtp()
-    const form = document.createElement("form")
-    const input = document.createElement("input")
-    const emailForm = document.createElement("input")
-    input.setAttribute("type", "text")
-    input.setAttribute("name", "key")
-    input.setAttribute("value", activationKey)
-    emailForm.setAttribute("type", "email")
-    emailForm.setAttribute("name", "email")
-    emailForm.setAttribute("value", email)
-    form.appendChild(input)
-    form.appendChild(emailForm)
-    if (email != "" && email?.substring(email.length - 10) == "@gmail.com") {
-      controlOtpButton()
-      emailjs.sendForm('service_j2eha26', 'template_abwpmfb', form, 'hadEOpMkKVifHmg3u')
-      .then((result) => {
-          console.log(result.text);
-      }, (error) => {
-          console.log(error.text);
-      });
-    }
-    else {
-      document.getElementById("email").reportValidity()
-    }
-  }
-  function addToWaitlist(e){
+  
+  function addToWaitlist(){
     generateKey()
     document.getElementById("fName").value == "" && document.getElementById("fName").reportValidity()
     document.getElementById("lName").value == "" && document.getElementById("lName").reportValidity()
@@ -124,8 +102,7 @@ export default function Home() {
         body: JSON.stringify(data)
       }).then(async result => {
         if (result.status == 200) {
-          sendKey()
-          document.getElementById("join").innerHTML = "User added to waitlist!"
+          window.location.href = "/thankyou?key="+activationKey+"&email="+email
         }
         else if (result.status == 400) {
           document.getElementById("join").innerHTML = "User already exists!"
@@ -139,18 +116,12 @@ export default function Home() {
   return (
     <div className='flex items-center justify-center min-h-screen'>
       <Head>
-        <title>Spade -Waitlist</title>
+        <title>Spade Waitlist</title>
         <link rel="icon" href="/logo.png" />
       </Head>
       <div className='flex flex-col items-center justify-between w-full max-w-4xl px-5 space-y-5 lg:space-y-0 lg:flex-row lg:space-x-10 lg:px-0'>
         <div className='max-w-xl space-y-4'>
-          <div className='flex items-center'>
-            {
-              //we're not using <Image /> on purpose
-            }
-            <img src="/logo.png" layout='intrinsic' alt='Spade Logo' className='w-12 lg:w-18' />
-            <h1 className='text-4xl font-bold tracking-widest text-center text-black lg:text-8xl lg:text-start'>SPADE</h1>
-          </div>
+          <SpadeHead />
         </div>
         <div className='flex-1 max-w-auto p-5 space-y-2 shadow-2xl rounded-2xl shadow-zinc-400'>
           <div className='space-y-1'>
@@ -437,7 +408,7 @@ export default function Home() {
                   setKey(e.target.value)
                   e.target.value == otp ? setConfirmed(true) : setConfirmed(false)
                 }} maxLength={6} minLength={6} id="key" required />
-              <button className={`w-[175px] text-xs sm:text-base text-black rounded-tr-xl rounded-br-xl ${confirmed ? "bg-green-500" : "bg-gray-300"} p-2.5 flex items-center justify-center`} onClick={
+              <button className="w-[175px] text-xs sm:text-base text-black rounded-tr-xl rounded-br-xl bg-green-500 p-2.5 flex items-center justify-center" onClick={
                 (e) => {
                   e.preventDefault()
                   document.getElementById("getOtp").innerHTML == "Send code" && sendOtp(e) 
@@ -447,7 +418,7 @@ export default function Home() {
           <div>
           </div>
             <Button className={`w-full font-normal tracking-widest ${confirmed ? "bg-green-500" : "bg-gray-300"} text-black text-md rounded-xl p-2.5`} id='join'
-              onClick={(e) => addToWaitlist(e)}>Join Waitlist</Button>
+              onClick={addToWaitlist}>Join Waitlist</Button>
         </div>
       </div>
     </div>
