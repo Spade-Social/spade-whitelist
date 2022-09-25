@@ -1,5 +1,5 @@
 import Error from "../components/Error";
-import Thanks from "../components/Greeting";
+import Greeting from "../components/Greeting";
 import sanityClient from "@sanity/client"
 import Head from "next/head";
 import emailjs from "emailjs-com";
@@ -38,7 +38,7 @@ export default function ThankYou({ status, code, email }) {
             </Head>
             <main className="flex flex-col items-center justify-center w-full h-screen">
                 {
-                    status ? <Thanks code={code} /> : <Error />
+                    status ? <Greeting code={code} /> : <Error />
                 }
             </main>
         </div>

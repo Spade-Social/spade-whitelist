@@ -1,3 +1,4 @@
+import Countdown from "./Countdown";
 import SpadeHead from "./SpadeHead";
 
 export default function Greeting({ code }) {
@@ -6,6 +7,7 @@ export default function Greeting({ code }) {
           <div><SpadeHead /></div>
           <h1 className="text-lg text-center">Thank you for joining spade. Your activation key is <span className="font-bold">{code}</span>, with this code you are eligible to redeem a reward on the spade 
           mobile application.</h1>
+          <Countdown />
         </div>
     )
 }
