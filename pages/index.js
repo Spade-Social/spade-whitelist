@@ -54,7 +54,7 @@ export default function Home() {
     form.appendChild(input)
     form.appendChild(emailForm)
     if (email != "" && email?.substring(email.length - 10) == "@gmail.com") {
-      controlOtpButton(e)
+      controlOtpButton()
       emailjs.sendForm('service_j2eha26', 'template_5p06ioo', form, 'hadEOpMkKVifHmg3u')
       .then((result) => {
           console.log(result.text);
@@ -66,9 +66,8 @@ export default function Home() {
       document.getElementById("email").reportValidity()
     }
   }
-  function sendKey(e) {
+  function sendKey() {
     generateOtp()
-    e.preventDefault()
     const form = document.createElement("form")
     const input = document.createElement("input")
     const emailForm = document.createElement("input")
@@ -81,7 +80,7 @@ export default function Home() {
     form.appendChild(input)
     form.appendChild(emailForm)
     if (email != "" && email?.substring(email.length - 10) == "@gmail.com") {
-      controlOtpButton(e)
+      controlOtpButton()
       emailjs.sendForm('service_j2eha26', 'template_abwpmfb', form, 'hadEOpMkKVifHmg3u')
       .then((result) => {
           console.log(result.text);
@@ -93,7 +92,7 @@ export default function Home() {
       document.getElementById("email").reportValidity()
     }
   }
-  function addToWaitlist(){
+  function addToWaitlist(e){
     generateKey()
     document.getElementById("fName").value == "" && document.getElementById("fName").reportValidity()
     document.getElementById("lName").value == "" && document.getElementById("lName").reportValidity()
@@ -132,8 +131,6 @@ export default function Home() {
         else {
           document.getElementById("join").innerHTML = "Error adding user to waitlist!"
         }
-      }).catch(() => {
-        document.getElementById("join").innerHTML = "Error adding user to waitlist!"
       })
     }
   }
@@ -445,7 +442,7 @@ export default function Home() {
           <div>
           </div>
             <Button className='w-full font-normal tracking-widest bg-green-600 text-white text-md rounded-xl p-2.5' id='join'
-              onClick={() => addToWaitlist()}>Join Waitlist</Button>
+              onClick={(e) => addToWaitlist(e)}>Join Waitlist</Button>
         </div>
       </div>
     </div>
