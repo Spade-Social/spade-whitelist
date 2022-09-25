@@ -12,13 +12,19 @@ export default function Home() {
   const [country, setCountry] = useState(null)
   const [key, setKey] = useState(null)
   const [activationKey, setActivationKey] = useState(Math.floor(100000 + Math.random() * 900000))
+  const [top, setOtp] = useState(Math.floor(100000 + Math.random() * 900000))
   const [error, setError] = useState(false)
   function generateKey() {
     setInterval(() => {
       setActivationKey(Math.floor(100000 + Math.random() * 900000))
     }, 600000); 
   }
-  function controlActivationButton() {
+  function generateOtp() {
+    setInterval(() => {
+      setOtp(Math.floor(100000 + Math.random() * 900000))
+    }, 600000); 
+  }
+  function controlOtpButton() {
     var to = new Date().getTime() + 60000
       document.getElementById("getOtp").disabled = true
       var x = setInterval(() => {
@@ -28,13 +34,40 @@ export default function Home() {
         document.getElementById("getOtp").innerHTML = secs
         if (secs == 0) {
           clearInterval(x)
-          document.getElementById("getOtp").innerHTML = "Get key"
+          document.getElementById("getOtp").innerHTML = "Get otp"
           document.getElementById("getOtp").disabled = false
         }
       }, 1000);
   }
   function sendOtp(e) {
-    generateKey()
+    generateOtp()
+    e.preventDefault()
+    const form = document.createElement("form")
+    const input = document.createElement("input")
+    const emailForm = document.createElement("input")
+    input.setAttribute("type", "text")
+    input.setAttribute("name", "otp")
+    input.setAttribute("value", activationKey)
+    emailForm.setAttribute("type", "email")
+    emailForm.setAttribute("name", "email")
+    emailForm.setAttribute("value", email)
+    form.appendChild(input)
+    form.appendChild(emailForm)
+    if (email != "" && email?.substring(email.length - 10) == "@gmail.com") {
+      controlOtpButton(e)
+      emailjs.sendForm('service_j2eha26', 'template_5p06ioo', form, 'hadEOpMkKVifHmg3u')
+      .then((result) => {
+          console.log(result.text);
+      }, (error) => {
+          console.log(error.text);
+      });
+    }
+    else {
+      document.getElementById("email").reportValidity()
+    }
+  }
+  function sendKey(e) {
+    generateOtp()
     e.preventDefault()
     const form = document.createElement("form")
     const input = document.createElement("input")
@@ -48,8 +81,8 @@ export default function Home() {
     form.appendChild(input)
     form.appendChild(emailForm)
     if (email != "" && email?.substring(email.length - 10) == "@gmail.com") {
-      controlActivationButton(e)
-      emailjs.sendForm('service_j2eha26', 'template_5p06ioo', form, 'hadEOpMkKVifHmg3u')
+      controlOtpButton(e)
+      emailjs.sendForm('service_j2eha26', 'template_abwpmfb', form, 'hadEOpMkKVifHmg3u')
       .then((result) => {
           console.log(result.text);
       }, (error) => {
@@ -89,9 +122,16 @@ export default function Home() {
         method: "POST",
         body: JSON.stringify(data)
       }).then(async result => {
-        result.status == 200 ? document.getElementById("join").innerHTML = "User added to waitlist!" :
-        result.status == 400 ? document.getElementById("join").innerHTML = "User already exists!" :
-        document.getElementById("join").innerHTML = "Error adding user to waitlist!"
+        if (result.status == 200) {
+          sendKey()
+          document.getElementById("join").innerHTML = "User added to waitlist!"
+        }
+        else if (result.status == 400) {
+          document.getElementById("join").innerHTML = "User already exists!"
+        }
+        else {
+          document.getElementById("join").innerHTML = "Error adding user to waitlist!"
+        }
       }).catch(() => {
         document.getElementById("join").innerHTML = "Error adding user to waitlist!"
       })
@@ -127,31 +167,6 @@ export default function Home() {
             <p className='text-xs font-semibold text-black'>Enter your email</p>
             <Input type="email" label="Email address" className='w-full border border-green-600 outline-none p-2.5 rounded-xl'
               id='email' color='green' onChange={(e) => setEmail(e.target.value)} required />
-          </div>
-          <div>
-            <p className='text-xs font-semibold text-black flex items-center space-x-0.5'>
-              <span>Enter your activation key</span>
-              <span>
-                <Popover>
-                  <PopoverHandler>
-                    <QuestionMarkCircleIcon className='w-4 h-4 hover:cursor-pointer' />
-                  </PopoverHandler>
-                  <PopoverContent>
-                    With this code you get a bonus off when registering your account
-                  </PopoverContent>
-                </Popover>
-              </span>
-            </p>
-            <div className='flex'>
-              <input type="number" placeholder="Enter your activation key" className='w-full border border-r-0 border-gray-400 outline-none px-2.5 rounded-tl-xl rounded-bl-xl'
-                onChange={(e) => setKey(e.target.value)} maxLength={6} minLength={6} id="key" required />
-              <button className='w-[150px] text-xs sm:text-base text-white rounded-tr-xl rounded-br-xl bg-green-600 p-2.5 flex items-center justify-center' onClick={
-                (e) => {
-                  e.preventDefault()
-                  document.getElementById("getOtp").innerHTML == "Get key" && sendOtp(e) 
-                } 
-              }><span id='getOtp'>Get key</span><span><KeyIcon className='w-4 h-4 sm:w-6 sm:h-6' /></span></button>
-            </div>
           </div>
           <div className='space-y-1'>
             <p className='text-xs font-semibold text-black'>Select your country</p>
@@ -402,6 +417,31 @@ export default function Home() {
                 <Option value="Zimbabwe">Zimbabwe</Option>
             </Select>
           </div>
+            <div>
+              <p className='text-xs font-semibold text-black flex items-center space-x-0.5'>
+                <span>Enter your activation key</span>
+                <span>
+                  <Popover>
+                    <PopoverHandler>
+                      <QuestionMarkCircleIcon className='w-4 h-4 hover:cursor-pointer' />
+                    </PopoverHandler>
+                    <PopoverContent>
+                      With this code you get a bonus off when registering your account
+                    </PopoverContent>
+                  </Popover>
+                </span>
+              </p>
+            </div>
+            <div className='flex'>
+              <input type="number" placeholder="Enter your activation key" className='w-full border border-r-0 border-gray-400 outline-none px-2.5 rounded-tl-xl rounded-bl-xl'
+                onChange={(e) => setKey(e.target.value)} maxLength={6} minLength={6} id="key" required />
+              <button className='w-[150px] text-xs sm:text-base text-white rounded-tr-xl rounded-br-xl bg-green-600 p-2.5 flex items-center justify-center' onClick={
+                (e) => {
+                  e.preventDefault()
+                  document.getElementById("getOtp").innerHTML == "Get otp" && sendOtp(e) 
+                } 
+              }><span id='getOtp'>Get otp</span><span><KeyIcon className='w-4 h-4 sm:w-6 sm:h-6' /></span></button>
+            </div>
           <div>
           </div>
             <Button className='w-full font-normal tracking-widest bg-green-600 text-white text-md rounded-xl p-2.5' id='join'
