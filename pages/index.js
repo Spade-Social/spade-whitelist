@@ -114,7 +114,7 @@ export default function Home() {
     }
   }
   return (
-    <div className='flex items-center justify-center min-h-screen'>
+    <div className='flex items-center justify-center min-h-screen bg-gray-200'>
       <Head>
         <title>Spade Waitlist</title>
         <link rel="icon" href="/logo.png" />
